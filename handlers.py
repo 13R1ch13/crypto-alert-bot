@@ -83,6 +83,9 @@ async def cmd_set_pct(message: Message):
     except ValueError:
         await message.answer("PERCENT должен быть числом")
         return
+    if percent <= 0:
+        await message.answer("PERCENT должен быть положительным")
+        return
     try:
         interval, seconds = parse_window(window)
     except ValueError as e:
