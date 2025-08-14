@@ -38,7 +38,10 @@ async def cmd_price(message: Message):
     client = BinanceClient()
     try:
         price = await client.get_price(symbol)
-        await message.answer(f"{symbol}: {price:.8f}")
+        if price is None:
+            await message.answer("Ошибка получения цены")
+        else:
+            await message.answer(f"{symbol}: {price:.8f}")
     except Exception as e:
         await message.answer(f"Ошибка получения цены: {e}")
     finally:

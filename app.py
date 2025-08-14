@@ -34,10 +34,14 @@ async def poller(bot: Bot):
                         continue
                     if symbol not in prices_cache:
                         try:
-                            prices_cache[symbol] = await client.get_price(symbol)
+                            price = await client.get_price(symbol)
                         except Exception as e:
                             logging.warning("price failed for %s: %s", symbol, e)
                             continue
+                        if price is None:
+                            logging.warning("price failed for %s: no data", symbol)
+                            continue
+                        prices_cache[symbol] = price
 
                     price = prices_cache[symbol]
                     op = a.get("op")
@@ -63,10 +67,14 @@ async def poller(bot: Bot):
                     key = (symbol, interval)
                     if key not in klines_cache:
                         try:
-                            klines_cache[key] = await client.get_klines(symbol, interval, limit=2)
+                            kl = await client.get_klines(symbol, interval, limit=2)
                         except Exception as e:
                             logging.warning("klines failed for %s %s: %s", symbol, interval, e)
                             continue
+                        if not kl:
+                            logging.warning("klines failed for %s %s: no data", symbol, interval)
+                            continue
+                        klines_cache[key] = kl
 
                     kl = klines_cache[key]
                     if len(kl) < 2:

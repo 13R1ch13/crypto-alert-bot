@@ -1,5 +1,6 @@
+import logging
 import httpx
-from typing import Optional, Literal
+from typing import Optional
 from config import BINANCE_API
 
 # Простой клиент к публичному API Binance
@@ -12,18 +13,26 @@ class BinanceClient:
     async def close(self):
         await self._client.aclose()
 
-    async def get_price(self, symbol: str) -> float:
+    async def get_price(self, symbol: str) -> Optional[float]:
         url = f"{self.base_url}/api/v3/ticker/price"
-        r = await self._client.get(url, params={"symbol": symbol.upper()})
-        r.raise_for_status()
-        data = r.json()
-        return float(data["price"])
+        try:
+            r = await self._client.get(url, params={"symbol": symbol.upper()})
+            r.raise_for_status()
+            data = r.json()
+            return float(data["price"])
+        except httpx.HTTPError as e:
+            logging.exception("get_price failed for %s: %s", symbol, e)
+            return None
 
-    async def get_klines(self, symbol: str, interval: str, limit: int = 2):
+    async def get_klines(self, symbol: str, interval: str, limit: int = 2) -> Optional[list]:
         url = f"{self.base_url}/api/v3/klines"
-        r = await self._client.get(url, params={"symbol": symbol.upper(), "interval": interval, "limit": limit})
-        r.raise_for_status()
-        return r.json()
+        try:
+            r = await self._client.get(url, params={"symbol": symbol.upper(), "interval": interval, "limit": limit})
+            r.raise_for_status()
+            return r.json()
+        except httpx.HTTPError as e:
+            logging.exception("get_klines failed for %s %s: %s", symbol, interval, e)
+            return None
 
 WINDOW_TO_INTERVAL = {
     "15m": ("15m", 15*60),
