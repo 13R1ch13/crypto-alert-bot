@@ -6,12 +6,12 @@ from aiogram.client.default import DefaultBotProperties
 from config import TELEGRAM_TOKEN, POLL_INTERVAL
 from db import init_db, get_active_alerts, deactivate_alert
 from handlers import router
-from binance import BinanceClient, WINDOW_TO_INTERVAL
+from tradingview import TradingViewClient, WINDOW_TO_INTERVAL
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
 async def poller(bot: Bot):
-    client = BinanceClient()
+    client = TradingViewClient()
     failed_deactivations = set()
     try:
         while True:

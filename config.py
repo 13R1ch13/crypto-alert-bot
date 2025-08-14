@@ -18,4 +18,4 @@ except ValueError:
     POLL_INTERVAL = 15
 
 DB_PATH = os.getenv("DB_PATH", ".data/bot.db")
-BINANCE_API = os.getenv("BINANCE_API", "https://api.binance.com")
+TRADINGVIEW_API = os.getenv("TRADINGVIEW_API", "https://scanner.tradingview.com")
