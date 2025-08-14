@@ -83,7 +83,7 @@ WINDOW_TO_INTERVAL = {
 def parse_window(window: str):
     window = window.strip().lower()
     if window not in WINDOW_TO_INTERVAL:
-        raise ValueError("Ошибка окна: используйте 15m, 30m, 1h, 4h, 1d")
+        raise ValueError("Invalid window: use 15m, 30m, 1h, 4h, 1d")
     interval, seconds = WINDOW_TO_INTERVAL[window]
     return interval, seconds
 
