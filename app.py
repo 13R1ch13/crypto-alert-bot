@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(na
 
 async def poller(bot: Bot):
     client = BinanceClient()
+    failed_deactivations = set()
     try:
         while True:
             try:
@@ -48,7 +49,11 @@ async def poller(bot: Bot):
                             await bot.send_message(a["chat_id"], text)
                         except Exception as e:
                             logging.warning("send_message failed: %s", e)
-                        await deactivate_alert(a["id"])
+                        try:
+                            await deactivate_alert(a["id"])
+                        except Exception as e:
+                            logging.warning("deactivate_alert failed for %s: %s", a["id"], e)
+                            failed_deactivations.add(a["id"])
 
                 elif a_type == "pct":
                     window = a.get("window_str")
@@ -88,7 +93,19 @@ async def poller(bot: Bot):
                             await bot.send_message(a["chat_id"], text)
                         except Exception as e:
                             logging.warning("send_message failed: %s", e)
-                        await deactivate_alert(a["id"])
+                        try:
+                            await deactivate_alert(a["id"])
+                        except Exception as e:
+                            logging.warning("deactivate_alert failed for %s: %s", a["id"], e)
+                            failed_deactivations.add(a["id"])
+
+            for alert_id in list(failed_deactivations):
+                try:
+                    await deactivate_alert(alert_id)
+                except Exception as e:
+                    logging.warning("deactivate_alert retry failed for %s: %s", alert_id, e)
+                else:
+                    failed_deactivations.discard(alert_id)
 
             await asyncio.sleep(POLL_INTERVAL)
     finally:
