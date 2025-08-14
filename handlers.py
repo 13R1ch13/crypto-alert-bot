@@ -2,8 +2,8 @@ from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
 from db import add_price_alert, add_pct_alert, list_alerts, delete_alert
-from binance import parse_window
-from binance import BinanceClient
+from tradingview import parse_window
+from tradingview import TradingViewClient
 import re
 import asyncio
 
@@ -35,7 +35,7 @@ async def cmd_price(message: Message):
     if not SYMBOL_RE.match(symbol):
         await message.answer("Некорректный символ. Пример: BTCUSDT")
         return
-    client = BinanceClient()
+    client = TradingViewClient()
     try:
         price = await client.get_price(symbol)
         if price is None:
