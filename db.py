@@ -1,6 +1,5 @@
 from pathlib import Path
 import aiosqlite
-from typing import List, Optional, Tuple, Any, Dict
 from config import DB_PATH
 
 # Гарантируем, что директория для БД существует
