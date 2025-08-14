@@ -1,7 +1,6 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
-from aiogram.enums.parse_mode import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
 from config import TELEGRAM_TOKEN, POLL_INTERVAL
@@ -105,7 +104,7 @@ async def main():
 
     bot = Bot(
         token=TELEGRAM_TOKEN,
-        default=DefaultBotProperties(parse_mode=ParseMode.HTML),
+        default=DefaultBotProperties(parse_mode=None),
     )
     dp = Dispatcher()
     dp.include_router(router)
