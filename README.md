@@ -1,30 +1,30 @@
 # Crypto Alert Telegram Bot (Binance, async, SQLite)
 
-Бот присылает алерты по цене и по %-изменению за окно времени.
-Реализовано на **Python 3.10+**, **aiogram v3**, **httpx**, **aiosqlite**.
+The bot sends alerts for price moves and percent change over a time window.
+Built with **Python 3.10+**, **aiogram v3**, **httpx**, **aiosqlite**.
 
-## Команды
-- `/start`, `/help` — краткая справка.
-- `/price <SYMBOL>` — текущая цена (например: `/price BTCUSDT`).
-- `/set <SYMBOL> <OP> <PRICE>` — ценовой алерт (одиночный). Примеры:
+## Commands
+- `/start`, `/help` — short help.
+- `/price <SYMBOL>` — current price (example: `/price BTCUSDT`).
+- `/set <SYMBOL> <OP> <PRICE>` — price alert (single shot). Examples:
   - `/set BTCUSDT >= 65000`
   - `/set ETHUSDT <= 3000`
-- `/set_pct <SYMBOL> <PERCENT> <WINDOW>` — алерт на %‑изменение за окно.
-  - Окно: `15m`, `30m`, `1h`, `4h`, `1d`
-  - Пример: `/set_pct BTCUSDT 5 1h` (±5% от цены за последний час)
-- `/list` — показать активные алерты.
-- `/delete <ID>` — удалить алерт.
+- `/set_pct <SYMBOL> <PERCENT> <WINDOW>` — percent change alert over a window.
+  - Windows: `15m`, `30m`, `1h`, `4h`, `1d`
+  - Example: `/set_pct BTCUSDT 5 1h` (±5% from the price over the last hour)
+- `/list` — show active alerts.
+- `/delete <ID>` — delete an alert.
 
-После срабатывания алерт деактивируется (одиночный).
+Alerts deactivate after triggering (single shot).
 
-## Быстрый старт (локально)
-1) Установите Python 3.10+.
-2) В папке проекта:
+## Quick start (local)
+1. Install Python 3.10+.
+2. In the project folder:
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
    pip install -r requirements.txt
-   cp .env.example .env  # и вставьте токен Telegram-бота
+   cp .env.example .env  # paste your Telegram bot token
    python app.py
    ```
 
@@ -34,8 +34,9 @@ docker build -t crypto-alert-bot .
 docker run --rm -it --env-file .env crypto-alert-bot
 ```
 
-## Примечания
-- Используется публичный API Binance (ключи не нужны).
-- БД SQLite создаётся автоматически в `.data/bot.db`.
-- Интервалы опроса и базовый URL настраиваются в `.env`.
-- Код легко расширить: добавить EMA/RSI, уведомления в канал и т.д.
+## Notes
+- Uses the public Binance API (no keys required).
+- The SQLite database is created automatically at `.data/bot.db`.
+- Polling intervals and the base URL are configured in `.env`.
+- The code is easy to extend: add EMA/RSI, channel notifications, etc.
+
