@@ -47,7 +47,7 @@ async def poller(bot: Bot):
                     op = a.get("op")
                     target = float(a.get("target", 0))
                     if (op == ">=" and price >= target) or (op == "<=" and price <= target):
-                        text = f"🔔 #{a['id']} {symbol}: текущая {price:.8f} {op} {target}"
+                        text = f"🔔 #{a['id']} {symbol}: current price {price:.8f} {op} {target}"
                         try:
                             await bot.send_message(a["chat_id"], text)
                         except Exception as e:
@@ -93,8 +93,8 @@ async def poller(bot: Bot):
                     if abs(change_pct) >= threshold:
                         sign = "▲" if change_pct >= 0 else "▼"
                         text = (
-                            f"🔔 #{a['id']} {symbol} {sign} {change_pct:.2f}% за {window}\n"
-                            f"Цена: {last_close:.8f} (была {prev_close:.8f})"
+                            f"🔔 #{a['id']} {symbol} {sign} {change_pct:.2f}% over {window}\n"
+                            f"Price: {last_close:.8f} (was {prev_close:.8f})"
                         )
                         try:
                             await bot.send_message(a["chat_id"], text)
@@ -123,7 +123,7 @@ async def poller(bot: Bot):
 
 async def main():
     if not TELEGRAM_TOKEN or ":" not in TELEGRAM_TOKEN:
-        raise SystemExit("TELEGRAM_TOKEN пустой или некорректный. Проверь .env у BotFather.")
+        raise SystemExit("TELEGRAM_TOKEN is empty or invalid. Check your .env from BotFather.")
 
     await init_db()
 
